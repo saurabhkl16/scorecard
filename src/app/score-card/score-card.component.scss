@@ -12,11 +12,21 @@
   padding: 20px;
   border-radius: 10px;
 }
+
+.right-side {
+  width: 37%;
+  background: black;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  min-height: 600px;
+}
+
 .buttons {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  max-width: 300px;
+  max-width: 400px;
   margin: 20px auto;
   padding: 20px;
   background: #333;
@@ -163,6 +173,7 @@
     border: 2px solid white; /* Border around each column */
     padding: 10px; /* Add some spacing inside each column */
     border-radius: 10px; /* Optional: Makes the corners rounded */
+    min-height: 175px;
   }
 }
 
@@ -191,16 +202,16 @@
     font-size: 18px;
   }
 
-//   .ball {
-//     display: inline-block;
-//     width: 30px;
-//     height: 30px;
-//     line-height: 30px;
-//     text-align: center;
-//     font-weight: bold;
-//     border-radius: 50%;
-//     margin: 2px;
-//   }
+  //   .ball {
+  //     display: inline-block;
+  //     width: 30px;
+  //     height: 30px;
+  //     line-height: 30px;
+  //     text-align: center;
+  //     font-weight: bold;
+  //     border-radius: 50%;
+  //     margin: 2px;
+  //   }
 
   .ball-red {
     background-color: red;
