@@ -1,0 +1,148 @@
+<div class="main">
+  <div class="scorecard">
+    <div class="top-content d-flex">
+      <div class="first-team d-flex">
+        <div class="team-logo me-4" style="background-color: blueviolet">
+          <img src="/ipl-team-logo/kkr.png" height="120px" alt="logo" />
+        </div>
+        <div
+          class="score d-flex flex-column justify-content-center align-items-center"
+        >
+          <h3>Kolkatta</h3>
+          <h5>{{ firstInnings.runs }}-{{ firstInnings.wickets }}</h5>
+          <h5>Overs: {{ firstInnings.overs.toFixed(1) }}</h5>
+        </div>
+      </div>
+
+      <div class="status me-4">
+        <h1>{{ isFirstInnings ? "1st Innings" : "2nd Innings" }}</h1>
+      </div>
+
+      <div class="second-team">
+        <div
+          class="score d-flex flex-column justify-content-center align-items-center me-4"
+        >
+          <h3>Rajastan</h3>
+          <h5 *ngIf="isFirstInnings">Yet to bat</h5>
+          <h5 *ngIf="!isFirstInnings">
+            {{ secondInnings.runs }}-{{ secondInnings.wickets }}
+          </h5>
+          <h5 *ngIf="!isFirstInnings">
+            Overs: {{ secondInnings.overs.toFixed(1) }}
+          </h5>
+        </div>
+        <div class="team-logo" style="background-color: rgb(241, 2, 161)">
+          <img src="/ipl-team-logo/rr.png" height="120px" alt="logo" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mid-content">
+      <div class="score-timeline d-flex">
+        <h4 class="m-0 mt-1">Last 6 balls:</h4>
+        <div class="last-6-balls ms-4">
+          <div
+            *ngFor="let ball of currentInnings.lastBalls.slice(-6)"
+            [ngClass]="getBallClass(ball)"
+          >
+            {{ ball }}
+          </div>
+        </div>
+      </div>
+      <img src="stadium.jpg" alt="stadium-image" height="150px" width="100%" />
+    </div>
+
+    <div class="bottom-content">
+      <div class="players">
+        <div class="batting-team-player-one">
+          <div class="top d-flex">
+            <img src="/rr-team/sanju.avif" alt="" height="100px" />
+            <div class="runs">
+              <h2>
+                {{ teams.secondTeam["players"][0].batting.runs }} ({{
+                  teams.secondTeam["players"][0].batting.balls
+                }})
+              </h2>
+              <div>
+                4s:{{ teams.secondTeam["players"][0].batting.fours }} 6s:{{
+                  teams.secondTeam["players"][0].batting.sixes
+                }}
+                sr: 220
+              </div>
+            </div>
+          </div>
+          <div class="player-name">
+            <h2>{{ teams.secondTeam["players"][0].name }}</h2>
+          </div>
+        </div>
+
+        <div class="batting-team-player-two">
+          <div class="top d-flex">
+            <img src="/rr-team/hetmyre.webp" alt="" height="100px" />
+            <div class="runs">
+              <h2>
+                {{ teams.secondTeam["players"][1].batting.runs }} ({{
+                  teams.secondTeam["players"][1].batting.balls
+                }})
+              </h2>
+              <div>
+                4s:{{ teams.secondTeam["players"][1].batting.fours }} 6s:{{
+                  teams.secondTeam["players"][1].batting.sixes
+                }}
+                sr: 220
+              </div>
+            </div>
+          </div>
+          <div class="player-name">
+            <h2>{{ teams.secondTeam["players"][1].name }}</h2>
+          </div>
+        </div>
+
+        <div class="current-bowler">
+          <div class="top d-flex">
+            <img src="/rr-team/hetmyre.webp" alt="" height="100px" />
+            <div class="runs">
+              <h2>{{ teams.secondTeam["players"][1].bowling.runsConceded }}</h2>
+              <div>
+                Overs:({{ teams.secondTeam["players"][1].bowling.overs }}) Eco:
+                {{ teams.secondTeam["players"][1].bowling.economy }}
+              </div>
+            </div>
+          </div>
+          <div class="player-name">
+            <h2>{{ teams.secondTeam["players"][8].name }}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score Update Buttons -->
+  <div class="buttons">
+    <button (click)="updateScore(1)">1</button>
+    <button (click)="updateScore(2)">2</button>
+    <button (click)="updateScore(3)">3</button>
+    <button (click)="updateScore(4)">4</button>
+    <button (click)="updateScore(6)">6</button>
+    <button (click)="updateWicket()">W</button>
+    <button (click)="updateExtra('NB')">NB</button>
+    <!-- <button (click)="updateExtra('WD')">WD</button> -->
+    <button (click)="updateOvers()">Next Ball</button>
+    <button (click)="updateExtra('WD', 0)">WD</button>
+    <button (click)="updateExtra('WD', 1)">WD+1</button>
+    <button (click)="updateExtra('WD', 2)">WD+2</button>
+    <button (click)="updateExtra('WD', 4)">WD+4</button>
+
+    <!-- No Ball (Extra 1 Run) -->
+    <button (click)="updateExtra('NB', 0)">NB</button>
+    <button (click)="updateExtra('NB', 1)">NB+1</button>
+    <button (click)="updateExtra('NB', 2)">NB+2</button>
+    <button (click)="updateExtra('NB', 4)">NB+4</button>
+    <button (click)="updateExtra('NB', 6)">NB+6</button>
+
+    <!-- Leg Byes (Counts as a Legal Delivery) -->
+    <button (click)="updateExtra('LB', 1)">LB+1</button>
+    <button (click)="updateExtra('LB', 2)">LB+2</button>
+    <button (click)="updateExtra('LB', 4)">LB+4</button>
+  </div>
+</div>
