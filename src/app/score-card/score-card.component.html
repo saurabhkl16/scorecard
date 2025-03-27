@@ -49,7 +49,7 @@
           </div>
         </div>
       </div>
-      <img src="stadium.jpg" alt="stadium-image" height="150px" width="100%" />
+      <img src="stadium.jpg" alt="stadium-image" height="200px" width="100%" />
     </div>
 
     <div class="bottom-content">
@@ -59,20 +59,20 @@
             <img src="/rr-team/sanju.avif" alt="" height="100px" />
             <div class="runs">
               <h2>
-                {{ teams.secondTeam["players"][0].batting.runs }} ({{
-                  teams.secondTeam["players"][0].batting.balls
+                {{ teams.firstTeam["players"][0].batting.runs }} ({{
+                  teams.firstTeam["players"][0].batting.balls
                 }})
               </h2>
               <div>
-                4s:{{ teams.secondTeam["players"][0].batting.fours }} 6s:{{
-                  teams.secondTeam["players"][0].batting.sixes
+                4s:{{ teams.firstTeam["players"][0].batting.fours }} 6s:{{
+                  teams.firstTeam["players"][0].batting.sixes
                 }}
                 sr: 220
               </div>
             </div>
           </div>
           <div class="player-name">
-            <h2>{{ teams.secondTeam["players"][0].name }}</h2>
+            <h2>{{ selectedPlayer1 }}</h2>
           </div>
         </div>
 
@@ -81,20 +81,20 @@
             <img src="/rr-team/hetmyre.webp" alt="" height="100px" />
             <div class="runs">
               <h2>
-                {{ teams.secondTeam["players"][1].batting.runs }} ({{
-                  teams.secondTeam["players"][1].batting.balls
+                {{ teams.firstTeam["players"][1].batting.runs }} ({{
+                  teams.firstTeam["players"][1].batting.balls
                 }})
               </h2>
               <div>
-                4s:{{ teams.secondTeam["players"][1].batting.fours }} 6s:{{
-                  teams.secondTeam["players"][1].batting.sixes
+                4s:{{ teams.firstTeam["players"][1].batting.fours }} 6s:{{
+                  teams.firstTeam["players"][1].batting.sixes
                 }}
                 sr: 220
               </div>
             </div>
           </div>
           <div class="player-name">
-            <h2>{{ teams.secondTeam["players"][1].name }}</h2>
+            <h2>{{ selectedPlayer2 }}</h2>
           </div>
         </div>
 
@@ -110,39 +110,101 @@
             </div>
           </div>
           <div class="player-name">
-            <h2>{{ teams.secondTeam["players"][8].name }}</h2>
+            <h2>{{ selectedBowler }}</h2>
           </div>
         </div>
       </div>
     </div>
   </div>
-
   <!-- Score Update Buttons -->
-  <div class="buttons">
-    <button (click)="updateScore(1)">1</button>
-    <button (click)="updateScore(2)">2</button>
-    <button (click)="updateScore(3)">3</button>
-    <button (click)="updateScore(4)">4</button>
-    <button (click)="updateScore(6)">6</button>
-    <button (click)="updateWicket()">W</button>
-    <button (click)="updateExtra('NB')">NB</button>
-    <!-- <button (click)="updateExtra('WD')">WD</button> -->
-    <button (click)="updateOvers()">Next Ball</button>
-    <button (click)="updateExtra('WD', 0)">WD</button>
-    <button (click)="updateExtra('WD', 1)">WD+1</button>
-    <button (click)="updateExtra('WD', 2)">WD+2</button>
-    <button (click)="updateExtra('WD', 4)">WD+4</button>
+  <div class="right-side">
+    <div class="player-selection">
+      <div class="mb-3">
+        <label class="w-25" for="player1">Select Batsman 1</label>
+        <select
+          class="w-50"
+          id="player1"
+          [(ngModel)]="selectedPlayer1"
+          [value]="selectedPlayer1"
+        >
+          <option
+            *ngFor="let player of batsOneList"
+            [value]="player.name"
+            [disabled]="
+              player.name === selectedPlayer2 || player.batting.out === true
+            "
+          >
+            {{ player.name }}
+          </option>
+        </select>
+      </div>
 
-    <!-- No Ball (Extra 1 Run) -->
-    <button (click)="updateExtra('NB', 0)">NB</button>
-    <button (click)="updateExtra('NB', 1)">NB+1</button>
-    <button (click)="updateExtra('NB', 2)">NB+2</button>
-    <button (click)="updateExtra('NB', 4)">NB+4</button>
-    <button (click)="updateExtra('NB', 6)">NB+6</button>
+      <div class="mb-3">
+        <label class="w-25" for="player2">Select Batsman 2</label>
+        <select
+          class="w-50"
+          id="player2"
+          [(ngModel)]="selectedPlayer2"
+          [value]="selectedPlayer2"
+        >
+          <option
+            *ngFor="let player of batsTwoList"
+            [value]="player.name"
+            [disabled]="
+              player.name === selectedPlayer1 || player.batting.out === true
+            "
+          >
+            {{ player.name }}
+          </option>
+        </select>
+      </div>
 
-    <!-- Leg Byes (Counts as a Legal Delivery) -->
-    <button (click)="updateExtra('LB', 1)">LB+1</button>
-    <button (click)="updateExtra('LB', 2)">LB+2</button>
-    <button (click)="updateExtra('LB', 4)">LB+4</button>
+      <div class="mb-3">
+        <label class="w-25" for="bowler">Select Bowler</label>
+        <select
+          class="w-50"
+          id="bowler"
+          [(ngModel)]="selectedBowler"
+          [value]="selectedBowler"
+        >
+          <option
+            *ngFor="let player of bowlerList"
+            [value]="player.name"
+          >
+            {{ player.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      class="buttons mt-5"
+      *ngIf="selectedBowler && selectedPlayer1 && selectedPlayer2"
+    >
+      <button (click)="updateScore(1)">1</button>
+      <button (click)="updateScore(2)">2</button>
+      <button (click)="updateScore(3)">3</button>
+      <button (click)="updateScore(4)">4</button>
+      <button (click)="updateScore(6)">6</button>
+      <button (click)="updateWicket()">W</button>
+      <button (click)="updateExtra('NB')">NB</button>
+      <!-- <button (click)="updateExtra('WD')">WD</button> -->
+      <button (click)="updateOvers()">Next Ball</button>
+      <button (click)="updateExtra('WD', 0)">WD</button>
+      <button (click)="updateExtra('WD', 1)">WD+1</button>
+      <button (click)="updateExtra('WD', 2)">WD+2</button>
+      <button (click)="updateExtra('WD', 4)">WD+4</button>
+
+      <!-- No Ball (Extra 1 Run) -->
+      <button (click)="updateExtra('NB', 0)">NB</button>
+      <button (click)="updateExtra('NB', 1)">NB+1</button>
+      <button (click)="updateExtra('NB', 2)">NB+2</button>
+      <button (click)="updateExtra('NB', 4)">NB+4</button>
+      <button (click)="updateExtra('NB', 6)">NB+6</button>
+
+      <!-- Leg Byes (Counts as a Legal Delivery) -->
+      <button (click)="updateExtra('LB', 1)">LB+1</button>
+      <button (click)="updateExtra('LB', 2)">LB+2</button>
+      <button (click)="updateExtra('LB', 4)">LB+4</button>
+    </div>
   </div>
 </div>
