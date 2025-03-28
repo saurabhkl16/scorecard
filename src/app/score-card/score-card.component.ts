@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MainService } from '../main.service';
 
 @Component({
   selector: 'app-score-card',
@@ -10,134 +11,16 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
 })
 export class ScoreCardComponent {
-  selectedPlayer1 = '';
-  selectedPlayer2 = '';
-  selectedBowler = '';
-  extraBallPending = false;
-  public teams = {
-    firstTeam: {
-      name: 'Kolkata Knight Riders',
-      logo: '/ipl-team-logo/kkr.png',
-      players: [
-        {
-          name: 'Quinton de Kock (wk)',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Sunil Narine',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Ajinkya Rahane (capt)',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Venkatesh Iyer',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Angkrish Raghuvanshi',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Rinku Singh',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Andre Russell',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Ramandeep Singh',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Harshit Rana',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Spencer Johnson/Anrich Nortje',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Varun Chakravarthy',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-      ],
-    },
-    secondTeam: {
-      name: 'Rajasthan Royals',
-      logo: '/ipl-team-logo/rr.png',
-      players: [
-        {
-          name: 'Sanju S (c)(wk)',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Yashasvi Jaiswal',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Shimron Hetmyer',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Riyan Parag',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Dhruv Jurel',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Nitish Rana',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Wanindu Hasaranga',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Jofra Archer',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Sandeep Sharma',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Fazalhaq Farooqi',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-        {
-          name: 'Kumar Kartikeya',
-          batting: { runs: 0, balls: 0, fours: 0, sixes: 0, out: false },
-          bowling: { overs: 0, runsConceded: 0, wickets: 0, economy: 0 },
-        },
-      ],
-    },
-  };
+  public selectedPlayer1 = '';
+  public selectedPlayer2 = '';
+  public selectedBowler = '';
+  public playerOneIndex = 0;
+  public playerTwoIndex = 1;
+  public curBowlerId = 10;
+  public extraBallPending = false;
+  public teams: any;
+  public onSriker = 'player-one';
+  public hideTable = true;
 
   firstInnings = { runs: 0, wickets: 0, overs: 0.0, lastBalls: [] as string[] };
   secondInnings = {
@@ -151,9 +34,13 @@ export class ScoreCardComponent {
   public batsTwoList: any;
   public bowlerList: any;
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private service: MainService) {}
 
   ngOnInit() {
+    this.teams = {
+      firstTeam: this.service.ipl2025Teams.rcb,
+      secondTeam: this.service.ipl2025Teams.csk,
+    };
     this.batsOneList = this.teams.firstTeam.players;
     this.batsTwoList = this.teams.firstTeam.players;
     this.bowlerList = this.teams.secondTeam.players;
@@ -168,33 +55,75 @@ export class ScoreCardComponent {
     this.addBall(run.toString());
     if (this.isFirstInnings) {
       const playerList = this.teams.firstTeam.players;
+      const playerList2 = this.teams.secondTeam.players;
       for (let i = 0; i < playerList.length; i++) {
-        if (this.selectedPlayer1 === playerList[i].name) {
+        if (
+          this.selectedPlayer1 === playerList[i].name &&
+          this.onSriker === 'player-one'
+        ) {
           playerList[i].batting.runs += run;
           playerList[i].batting.balls += 1;
+          this.playerOneIndex = this.teams.firstTeam.players[i].id;
           run === 4
             ? (playerList[i].batting.fours += 1)
             : playerList[i].batting.fours;
           run === 6
             ? (playerList[i].batting.sixes += 1)
             : playerList[i].batting.sixes;
-          console.log(playerList);
+          playerList[i].batting.sr =
+            (playerList[i].batting.runs / playerList[i].batting.balls) * 100;
+          console.log(playerList, this.teams.secondTeam.players);
           break;
-        } else if (this.selectedPlayer2 === playerList[i].name) {
+        } else if (
+          this.selectedPlayer2 === playerList[i].name &&
+          this.onSriker === 'player-two'
+        ) {
           playerList[i].batting.runs += run;
           playerList[i].batting.balls += 1;
+          this.playerTwoIndex = this.teams.firstTeam.players[i].id;
           run === 4
             ? (playerList[i].batting.fours += 1)
             : playerList[i].batting.fours;
           run === 6
             ? (playerList[i].batting.sixes += 1)
             : playerList[i].batting.sixes;
+          playerList[i].batting.sr =
+            (playerList[i].batting.runs / playerList[i].batting.balls) * 100;
           console.log(playerList);
           break;
         }
       }
+      for (let i = 0; i < playerList2.length; i++) {
+        if (this.selectedBowler === playerList2[i].name) {
+          playerList2[i].bowling.runsConceded += run;
+          playerList2[i].bowling.overs = parseFloat(
+            (playerList2[i].bowling.overs + 0.1).toFixed(1)
+          );
+          playerList2[i].bowling.economy =
+            Math.round(
+              (playerList2[i].bowling.runsConceded /
+                playerList2[i].bowling.overs) *
+                100
+            ) / 100;
+          debugger;
+          if (playerList2[i].bowling.overs % 1 >= 0.6) {
+            playerList2[i].bowling.overs =
+              Math.floor(playerList2[i].bowling.overs) + 1;
+          }
+          if (
+            playerList2[i].bowling.overs == 1 ||
+            playerList2[i].bowling.overs == 2 ||
+            playerList2[i].bowling.overs == 3 ||
+            playerList2[i].bowling.overs == 4
+          ) {
+            this.selectedBowler = '';
+          }
+          this.curBowlerId = playerList2[i].id;
+          break;
+        }
+      }
     }
-    this.cd.detectChanges();
+    this.onStrikerPlayer(run);
     this.updateOvers();
   }
 
@@ -204,11 +133,39 @@ export class ScoreCardComponent {
     this.updateOvers();
     if (this.isFirstInnings) {
       const playerList = this.teams.firstTeam.players;
+      const playerList2 = this.teams.secondTeam.players;
       for (let i = 0; i < playerList.length; i++) {
         if (this.selectedPlayer1 === playerList[i].name) {
           playerList[i].batting.balls += 1;
           this.teams.firstTeam.players[i].batting.out = true;
-          this.selectedPlayer1 = '';
+          if (this.onSriker === 'player-one') {
+            this.selectedPlayer1 = '';
+            this.playerOneIndex = this.teams.firstTeam.players[i].id;
+          } else if (this.onSriker === 'player-two') {
+            this.selectedPlayer2 = '';
+            this.playerTwoIndex = this.teams.firstTeam.players[i].id;
+          }
+          break;
+        }
+      }
+      for (let i = 0; i < playerList2.length; i++) {
+        if (this.selectedBowler === playerList2[i].name) {
+          this.curBowlerId = playerList2[i].id;
+          playerList2[i].bowling.wickets += 1;
+          playerList2[i].bowling.overs += 0.1;
+          if (playerList2[i].bowling.overs % 1 >= 0.6) {
+            playerList2[i].bowling.overs = Math.ceil(
+              playerList2[i].bowling.overs
+            );
+          }
+          if (
+            playerList2[i].bowling.overs == 1 ||
+            playerList2[i].bowling.overs == 2 ||
+            playerList2[i].bowling.overs == 3 ||
+            playerList2[i].bowling.overs == 4
+          ) {
+            this.selectedBowler = '';
+          }
           break;
         }
       }
@@ -222,6 +179,14 @@ export class ScoreCardComponent {
 
     if (extra === 'NB' || extra === 'WD') {
       this.extraBallPending = true; // ✅ Mark that an extra ball happened
+    }
+    debugger;
+    const playerList2 = this.teams.secondTeam.players;
+    for (let i = 0; i < playerList2.length; i++) {
+      if (this.selectedBowler === playerList2[i].name) {
+        this.curBowlerId = playerList2[i].id;
+        playerList2[i].bowling.runsConceded += 1 + runs;
+      }
     }
   }
 
@@ -259,5 +224,13 @@ export class ScoreCardComponent {
     if (ball.includes('W')) return 'ball ball-black'; // Black for Wicket
     if (ball === '0') return 'ball ball-gray'; // Gray for Dot Ball
     return 'ball ball-blue'; // Default Blue
+  }
+
+  public onStrikerPlayer(run: number) {
+    if (run === 1 || run === 3) {
+      this.onSriker === 'player-one'
+        ? (this.onSriker = 'player-two')
+        : (this.onSriker = 'player-one');
+    }
   }
 }

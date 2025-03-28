@@ -1,14 +1,14 @@
 <div class="main">
-  <div class="scorecard">
+  <div class="scorecard" *ngIf="hideTable">
     <div class="top-content d-flex">
-      <div class="first-team d-flex">
-        <div class="team-logo me-4" style="background-color: blueviolet">
-          <img src="/ipl-team-logo/kkr.png" height="120px" alt="logo" />
+      <div class="first-team d-flex justify-content-start">
+        <div class="team-logo me-4" style="background-color: rgb(190, 66, 66)">
+          <img src="/ipl-team-logo/rcb.png" height="100px" alt="logo" />
         </div>
         <div
           class="score d-flex flex-column justify-content-center align-items-center"
         >
-          <h3>Kolkatta</h3>
+          <h3>SRH</h3>
           <h5>{{ firstInnings.runs }}-{{ firstInnings.wickets }}</h5>
           <h5>Overs: {{ firstInnings.overs.toFixed(1) }}</h5>
         </div>
@@ -18,11 +18,11 @@
         <h1>{{ isFirstInnings ? "1st Innings" : "2nd Innings" }}</h1>
       </div>
 
-      <div class="second-team">
+      <div class="second-team d-flex justify-content-end">
         <div
           class="score d-flex flex-column justify-content-center align-items-center me-4"
         >
-          <h3>Rajastan</h3>
+          <h3>DC</h3>
           <h5 *ngIf="isFirstInnings">Yet to bat</h5>
           <h5 *ngIf="!isFirstInnings">
             {{ secondInnings.runs }}-{{ secondInnings.wickets }}
@@ -31,8 +31,8 @@
             Overs: {{ secondInnings.overs.toFixed(1) }}
           </h5>
         </div>
-        <div class="team-logo" style="background-color: rgb(241, 2, 161)">
-          <img src="/ipl-team-logo/rr.png" height="120px" alt="logo" />
+        <div class="team-logo" style="background-color: rgb(174, 168, 60)">
+          <img src="/ipl-team-logo/csk.png" height="120px" alt="logo" />
         </div>
       </div>
     </div>
@@ -55,19 +55,32 @@
     <div class="bottom-content">
       <div class="players">
         <div class="batting-team-player-one">
-          <div class="top d-flex">
+          <div
+            class="top d-flex justify-content-center"
+            [ngClass]="{
+              'yellow-bg': isFirstInnings,
+              'red-bg': !isFirstInnings
+            }"
+          >
             <img src="/rr-team/sanju.avif" alt="" height="100px" />
             <div class="runs">
               <h2>
-                {{ teams.firstTeam["players"][0].batting.runs }} ({{
-                  teams.firstTeam["players"][0].batting.balls
-                }})
+                {{ teams.firstTeam["players"][playerOneIndex].batting.runs }}
+                ({{ teams.firstTeam["players"][playerOneIndex].batting.balls }})
+                <span *ngIf="onSriker === 'player-one'">*</span>
               </h2>
               <div>
-                4s:{{ teams.firstTeam["players"][0].batting.fours }} 6s:{{
-                  teams.firstTeam["players"][0].batting.sixes
+                4s:{{
+                  teams.firstTeam["players"][playerOneIndex].batting.fours
                 }}
-                sr: 220
+                6s:{{
+                  teams.firstTeam["players"][playerOneIndex].batting.sixes
+                }}
+                sr:
+                {{
+                  teams.firstTeam["players"][playerTwoIndex].batting.sr
+                    | number : "1.2-2"
+                }}
               </div>
             </div>
           </div>
@@ -77,19 +90,32 @@
         </div>
 
         <div class="batting-team-player-two">
-          <div class="top d-flex">
+          <div
+            class="top d-flex justify-content-center"
+            [ngClass]="{
+              'yellow-bg': isFirstInnings,
+              'red-bg': !isFirstInnings
+            }"
+          >
             <img src="/rr-team/hetmyre.webp" alt="" height="100px" />
             <div class="runs">
               <h2>
-                {{ teams.firstTeam["players"][1].batting.runs }} ({{
-                  teams.firstTeam["players"][1].batting.balls
-                }})
+                {{ teams.firstTeam["players"][playerTwoIndex].batting.runs }}
+                ({{ teams.firstTeam["players"][playerTwoIndex].batting.balls }})
+                <span *ngIf="onSriker === 'player-two'">*</span>
               </h2>
               <div>
-                4s:{{ teams.firstTeam["players"][1].batting.fours }} 6s:{{
-                  teams.firstTeam["players"][1].batting.sixes
+                4s:{{
+                  teams.firstTeam["players"][playerTwoIndex].batting.fours
                 }}
-                sr: 220
+                6s:{{
+                  teams.firstTeam["players"][playerTwoIndex].batting.sixes
+                }}
+                sr:
+                {{
+                  teams.firstTeam["players"][playerTwoIndex].batting.sr
+                    | number : "1.2-2"
+                }}
               </div>
             </div>
           </div>
@@ -99,13 +125,27 @@
         </div>
 
         <div class="current-bowler">
-          <div class="top d-flex">
+          <div
+            class="top d-flex justify-content-center"
+            [ngClass]="{
+              'yellow-bg': !isFirstInnings,
+              'red-bg': isFirstInnings
+            }"
+          >
             <img src="/rr-team/hetmyre.webp" alt="" height="100px" />
             <div class="runs">
-              <h2>{{ teams.secondTeam["players"][1].bowling.runsConceded }}</h2>
+              <h2>
+                {{
+                  teams.secondTeam["players"][curBowlerId].bowling.runsConceded
+                }}
+                -
+                {{ teams.secondTeam["players"][curBowlerId].bowling.wickets }}
+              </h2>
               <div>
-                Overs:({{ teams.secondTeam["players"][1].bowling.overs }}) Eco:
-                {{ teams.secondTeam["players"][1].bowling.economy }}
+                Overs:({{
+                  teams.secondTeam["players"][curBowlerId].bowling.overs
+                }}) Eco:
+                {{ teams.secondTeam["players"][curBowlerId].bowling.economy }}
               </div>
             </div>
           </div>
@@ -116,6 +156,72 @@
       </div>
     </div>
   </div>
+  <!-- ##################  Batting scorcard ################## -->
+  <table
+    class="table table-bordered table-striped text-center p-3"
+    *ngIf="!hideTable"
+  >
+    <thead class="table-dark">
+      <tr>
+        <th>Player</th>
+        <th>Status</th>
+        <th>Runs (Balls)</th>
+        <th>Strike Rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let player of teams.firstTeam.players">
+        <td>{{ player.name }}</td>
+        <td>{{ player.batting.out === true ? "Out" : "" }}</td>
+        <td>{{ player.batting.runs }} ({{ player.batting.balls }})</td>
+        <td>{{ player.batting.sr.toFixed(2) }}</td>
+      </tr>
+    </tbody>
+    <tfoot class="table-secondary fw-bold">
+      <tr>
+        <td>Total</td>
+        <td>
+          <h5>{{ firstInnings.runs }}-{{ firstInnings.wickets }}</h5>
+        </td>
+        <td>Overs: {{ firstInnings.overs.toFixed(1) }}</td>
+      </tr>
+    </tfoot>
+  </table>
+  <!-- ##################  Bowling scorcard ################## -->
+  <table
+    class="table table-bordered table-striped text-center p-3"
+    *ngIf="!hideTable"
+  >
+    <thead class="table-dark">
+      <tr>
+        <th>Player</th>
+        <th>Overs</th>
+        <th>Runs</th>
+        <th>Wickets</th>
+        <th>Economy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let player of teams.secondTeam.players">
+        <tr *ngIf="player.bowling.runsConceded > 0">
+          <td>{{ player.name }}</td>
+          <td>{{ player.bowling.overs }}</td>
+          <td>{{ player.bowling.runsConceded }}</td>
+          <td>{{ player.bowling.wickets }}</td>
+          <td>{{ player.bowling.economy.toFixed(2) }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+    <tfoot class="table-secondary fw-bold">
+      <tr>
+        <td>Total</td>
+        <td>
+          <h5>{{ firstInnings.runs }}-{{ firstInnings.wickets }}</h5>
+        </td>
+        <td>Overs: {{ firstInnings.overs.toFixed(1) }}</td>
+      </tr>
+    </tfoot>
+  </table>
   <!-- Score Update Buttons -->
   <div class="right-side">
     <div class="player-selection">
@@ -170,6 +276,7 @@
           <option
             *ngFor="let player of bowlerList"
             [value]="player.name"
+            [disabled]="player.overs === 4"
           >
             {{ player.name }}
           </option>
@@ -180,6 +287,7 @@
       class="buttons mt-5"
       *ngIf="selectedBowler && selectedPlayer1 && selectedPlayer2"
     >
+      <button (click)="updateScore(0)">0</button>
       <button (click)="updateScore(1)">1</button>
       <button (click)="updateScore(2)">2</button>
       <button (click)="updateScore(3)">3</button>
@@ -205,6 +313,7 @@
       <button (click)="updateExtra('LB', 1)">LB+1</button>
       <button (click)="updateExtra('LB', 2)">LB+2</button>
       <button (click)="updateExtra('LB', 4)">LB+4</button>
+      <button (click)="hideTable = !hideTable">Scorecard</button>
     </div>
   </div>
 </div>
